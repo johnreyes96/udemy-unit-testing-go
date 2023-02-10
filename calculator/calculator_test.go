@@ -3,23 +3,37 @@ package calculator
 import "testing"
 
 func TestDiscountApplied(t *testing.T) {
-
 	calculator := NewDiscountCalculator(100, 20)
 	amount := calculator.Calculate(150)
 
-	if 130 != amount {
-		t.Fail()
+	if amount != 130 {
+		t.Errorf("expected 130 got %v", amount)
+	}
+}
+
+func TestDiscountMultipliedByTwoApplied(t *testing.T) {
+	calculator := NewDiscountCalculator(100, 20)
+	amount := calculator.Calculate(200)
+
+	if amount != 160 {
+		t.Errorf("expected 160 got %v", amount)
+	}
+}
+
+func TestDiscountMultipliedByThreeApplied(t *testing.T) {
+	calculator := NewDiscountCalculator(100, 20)
+	amount := calculator.Calculate(350)
+
+	if amount != 290 {
+		t.Errorf("expected 290 got %v", amount)
 	}
 }
 
 func TestDiscountNotApplied(t *testing.T) {
-
 	calculator := NewDiscountCalculator(100, 20)
-	amount := calculator.Calculate(60)
+	amount := calculator.Calculate(50)
 
-	t.Log("Hello!")
-
-	if 50 != amount {
-		t.Errorf("expected 50, got %v, failed because the discount was not expected to be applied", amount) // Error = Log + Fail
+	if amount != 50 {
+		t.Errorf("expected 50, got %v", amount) // Error = Log + Fail
 	}
 }
