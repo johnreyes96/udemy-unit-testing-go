@@ -2,38 +2,27 @@ package calculator
 
 import "testing"
 
-func TestDiscountApplied(t *testing.T) {
-	calculator := NewDiscountCalculator(100, 20)
-	amount := calculator.Calculate(150)
-
-	if amount != 130 {
-		t.Errorf("expected 130 got %v", amount)
+func TestDiscountCalculator(t *testing.T) {
+	type testCase struct {
+		minimumPurchaseAmount int
+		discount              int
+		purchaseAmount        int
+		expectedAmount        int
 	}
-}
 
-func TestDiscountMultipliedByTwoApplied(t *testing.T) {
-	calculator := NewDiscountCalculator(100, 20)
-	amount := calculator.Calculate(200)
-
-	if amount != 160 {
-		t.Errorf("expected 160 got %v", amount)
+	testCases := []testCase{
+		{minimumPurchaseAmount: 100, discount: 20, purchaseAmount: 150, expectedAmount: 130},
+		{minimumPurchaseAmount: 100, discount: 20, purchaseAmount: 200, expectedAmount: 160},
+		{minimumPurchaseAmount: 100, discount: 20, purchaseAmount: 350, expectedAmount: 290},
+		{minimumPurchaseAmount: 100, discount: 20, purchaseAmount: 50, expectedAmount: 50},
 	}
-}
 
-func TestDiscountMultipliedByThreeApplied(t *testing.T) {
-	calculator := NewDiscountCalculator(100, 20)
-	amount := calculator.Calculate(350)
+	for _, tc := range testCases {
+		calculator := NewDiscountCalculator(tc.minimumPurchaseAmount, tc.discount)
+		amount := calculator.Calculate(tc.purchaseAmount)
 
-	if amount != 290 {
-		t.Errorf("expected 290 got %v", amount)
-	}
-}
-
-func TestDiscountNotApplied(t *testing.T) {
-	calculator := NewDiscountCalculator(100, 20)
-	amount := calculator.Calculate(50)
-
-	if amount != 50 {
-		t.Errorf("expected 50, got %v", amount) // Error = Log + Fail
+		if amount != tc.expectedAmount {
+			t.Errorf("expected %v, got %v", tc.expectedAmount, amount)
+		}
 	}
 }
