@@ -16,15 +16,14 @@ func TestDiscountCalculator(t *testing.T) {
 		{name: "should apply 40", minimumPurchaseAmount: 100, discount: 20, purchaseAmount: 200, expectedAmount: 160},
 		{name: "should apply 60", minimumPurchaseAmount: 100, discount: 20, purchaseAmount: 350, expectedAmount: 290},
 		{name: "should not apply", minimumPurchaseAmount: 100, discount: 20, purchaseAmount: 50, expectedAmount: 50},
-		{name: "zero", minimumPurchaseAmount: 0, discount: 20, purchaseAmount: 50, expectedAmount: 50},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			calculator, err := NewDiscountCalculator(tc.minimumPurchaseAmount, tc.discount)
 			if err != nil {
-				// Fail + log
-				t.Errorf("could not instantiate the calculator %s", err.Error())
+				// FailNow + log
+				t.Fatalf("could not instantiate the calculator %s", err.Error())
 			}
 
 			amount := calculator.Calculate(tc.purchaseAmount)
@@ -33,5 +32,13 @@ func TestDiscountCalculator(t *testing.T) {
 				t.Errorf("expected %v, got %v", tc.expectedAmount, amount)
 			}
 		})
+	}
+}
+
+func TestDiscountCalculatorShouldFailWithZeroPurchaseAmount(t *testing.T) {
+	_, err := NewDiscountCalculator(0, 20)
+	if err == nil {
+		// FailNow + log
+		t.Fatalf("should not create the calculator with zero purchase amount")
 	}
 }
