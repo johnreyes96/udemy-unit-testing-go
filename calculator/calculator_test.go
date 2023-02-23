@@ -1,6 +1,10 @@
 package calculator
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+)
 
 type DiscountRepositoryMock struct{}
 
@@ -34,9 +38,7 @@ func TestDiscountCalculator(t *testing.T) {
 
 			amount := calculator.Calculate(tc.purchaseAmount)
 
-			if amount != tc.expectedAmount {
-				t.Errorf("expected %v, got %v", tc.expectedAmount, amount)
-			}
+			assert.Equal(t, tc.expectedAmount, amount)
 		})
 	}
 }
