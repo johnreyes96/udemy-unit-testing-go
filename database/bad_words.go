@@ -3,7 +3,7 @@ package database
 import "database/sql"
 
 type BadWords interface {
-	findAll() ([]string, error)
+	FindAll() ([]string, error)
 }
 
 type BadWordsRepository struct {
@@ -14,11 +14,11 @@ func newBadWordsRepository(db *sql.DB) *BadWordsRepository {
 	return &BadWordsRepository{bd: db}
 }
 
-func (dc *BadWordsRepository) findAll() (badWordList []string, err error) {
+func (dc *BadWordsRepository) FindAll() (badWordList []string, err error) {
 	sql := "SELECT name FROM bad_word"
 	rows, err := dc.bd.Query(sql)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	var badWord string

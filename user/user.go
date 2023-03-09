@@ -21,13 +21,13 @@ func NewUserService(userService database.User, badWordsRepository database.BadWo
 }
 
 func (c *UserService) Register(user entity.User) error {
-	badWords, err := c.badWordsRepository.findAll()
-	if err != {
+	badWords, err := c.badWordsRepository.FindAll()
+	if err != nil {
 		return err
 	}
 
 	for _, badWord := range badWords {
-		if strings.Contains(badWord, user.Description) {
+		if strings.Contains(user.Description, badWord) {
 			return errors.New("bad word found")
 		}
 	}
