@@ -36,10 +36,8 @@ func TestShouldSuccessfullyRegistrateAnUser(t *testing.T) {
 	}
 	userRepository := &UserRepositoryStub{}
 	userRepository.On("Add", user).Return(nil)
-
 	badWordsRepository := &BadWordsRepositoryStub{}
 	badWordsRepository.On("FindAll").Return([]string{"tomato", "potato"}, nil)
-
 	userService := NewUserService(userRepository, badWordsRepository)
 
 	err := userService.Register(user)
@@ -56,10 +54,8 @@ func TestShouldNotRegistrateTheUserWhenBadWordIsFound(t *testing.T) {
 	}
 	userRepository := &UserRepositoryStub{}
 	userRepository.On("Add", user).Return(nil)
-
 	badWordsRepository := &BadWordsRepositoryStub{}
 	badWordsRepository.On("FindAll").Return([]string{"tomato", "potato"}, nil)
-
 	userService := NewUserService(userRepository, badWordsRepository)
 
 	err := userService.Register(user)

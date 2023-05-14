@@ -43,19 +43,13 @@ func (gm *GatewayMock) Pay(creditCard entity.CreditCard, amount int) error {
 func TestShouldHaveASuccessfullAuthorization(t *testing.T) {
 	user := entity.User{}
 	creditCard := entity.CreditCard{}
-
 	attemptHistory := &AttemptHistory{}
 	attemptHistory.On("CountFailures", user).Return(1, nil)
-
 	gateway := &GatewayMock{}
 	gateway.On("IsAuthorized", user, creditCard).Return(true, nil)
-
 	paymentService := NewPaymentService(attemptHistory, gateway)
 
-	isAuthorized, err := paymentService.IsAuthorized(user, creditCard)
-	if err != nil {
-		t.Fatal(err.Error())
-	}
+	isAuthorized, _ := paymentService.IsAuthorized(user, creditCard)
 
 	attemptHistory.AssertNotCalled(t, "IncrementFailure", user)
 	assert.True(t, isAuthorized)
@@ -64,20 +58,14 @@ func TestShouldHaveASuccessfullAuthorization(t *testing.T) {
 func TestShouldHaveAFailedAuthorization(t *testing.T) {
 	user := entity.User{}
 	creditCard := entity.CreditCard{}
-
 	attemptHistory := &AttemptHistory{}
 	attemptHistory.On("CountFailures", user).Return(1, nil)
 	attemptHistory.On("IncrementFailure", user).Return(nil)
-
 	gateway := &GatewayMock{}
 	gateway.On("IsAuthorized", user, creditCard).Return(false, nil)
-
 	paymentService := NewPaymentService(attemptHistory, gateway)
 
-	isAuthorized, err := paymentService.IsAuthorized(user, creditCard)
-	if err != nil {
-		t.Fatal(err.Error())
-	}
+	isAuthorized, _ := paymentService.IsAuthorized(user, creditCard)
 
 	attemptHistory.AssertCalled(t, "IncrementFailure", user)
 	assert.False(t, isAuthorized)
@@ -86,18 +74,12 @@ func TestShouldHaveAFailedAuthorization(t *testing.T) {
 func TestShouldHaveAForceFailedAuthorization(t *testing.T) {
 	user := entity.User{}
 	creditCard := entity.CreditCard{}
-
 	attemptHistory := &AttemptHistory{}
 	attemptHistory.On("CountFailures", user).Return(6, nil)
-
 	gateway := &GatewayMock{}
-
 	paymentService := NewPaymentService(attemptHistory, gateway)
 
-	isAuthorized, err := paymentService.IsAuthorized(user, creditCard)
-	if err != nil {
-		t.Fatal(err.Error())
-	}
+	isAuthorized, _ := paymentService.IsAuthorized(user, creditCard)
 
 	gateway.AssertNotCalled(t, "IsAuthorized", user, creditCard)
 	attemptHistory.AssertNotCalled(t, "IncrementFailure", user)

@@ -67,11 +67,7 @@ func TestDiscountCalculator(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			discountRepositoryMock := DiscountRepositoryMock{}
 			discountRepositoryMock.On("FindCurrentDiscount").Return(tc.discount)
-			calculator, err := NewDiscountCalculator(tc.minimumPurchaseAmount, discountRepositoryMock)
-			if err != nil {
-				// FailNow + log
-				t.Fatalf("could not instantiate the calculator %s", err.Error())
-			}
+			calculator, _ := NewDiscountCalculator(tc.minimumPurchaseAmount, discountRepositoryMock)
 
 			amount := calculator.Calculate(tc.purchaseAmount)
 
@@ -82,9 +78,10 @@ func TestDiscountCalculator(t *testing.T) {
 
 func TestDiscountCalculatorShouldFailWithZeroPurchaseAmount(t *testing.T) {
 	discountRepositoryMock := DiscountRepositoryMock{}
+
 	_, err := NewDiscountCalculator(0, discountRepositoryMock)
+
 	if err == nil {
-		// FailNow + log
 		t.Fatalf("should not create the calculator with zero purchase amount")
 	}
 }
