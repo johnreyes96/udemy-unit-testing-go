@@ -23,8 +23,7 @@ func NewAttemptHistoryRepository(db *sql.DB) *AttemptHistoryRepository {
 
 func (dc *AttemptHistoryRepository) IncrementFailure(user entity.User) error {
 	sql := "INSERT INTO attempt_history (user_id) VALUES (?)"
-	_, err := dc.db.Exec(sql, user.ID)
-	if err != nil {
+	if _, err := dc.db.Exec(sql, user.ID); err != nil {
 		return err
 	}
 
@@ -34,8 +33,7 @@ func (dc *AttemptHistoryRepository) IncrementFailure(user entity.User) error {
 func (dc *AttemptHistoryRepository) CountFailures(user entity.User) (count int, err error) {
 	sql := "SELECT count(user_id) FROM attempt_history WHERE user_id = ?"
 	row := dc.db.QueryRow(sql)
-	err = row.Scan(&count)
-	if err != nil {
+	if err = row.Scan(&count); err != nil {
 		return 0, err
 	}
 

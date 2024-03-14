@@ -64,12 +64,11 @@ func (c *MyPayment) Pay(creditCard entity.CreditCard, amount int) error {
 		log.Fatalln(err)
 	}
 
-	_, err = http.Post(
+	if _, err = http.Post(
 		"https://mypayment.just.example/payment",
 		"application/json",
 		bytes.NewBuffer(data),
-	)
-	if err != nil {
+	); err != nil {
 		return err
 	}
 

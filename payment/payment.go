@@ -36,8 +36,7 @@ func (c *PaymentService) IsAuthorized(user entity.User, creditCard entity.Credit
 	}
 
 	if !isAuthorized {
-		err := c.attemptHistoryRepository.IncrementFailure(user)
-		if err != nil {
+		if err := c.attemptHistoryRepository.IncrementFailure(user); err != nil {
 			return false, err
 		}
 	}

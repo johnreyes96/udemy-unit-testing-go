@@ -32,8 +32,7 @@ func (c *UserService) Register(user entity.User) error {
 		}
 	}
 
-	err = c.userService.Add(user)
-	if err != nil {
+	if err = c.userService.Add(user); err != nil {
 		return err
 	}
 

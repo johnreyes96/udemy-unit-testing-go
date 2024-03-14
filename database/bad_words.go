@@ -10,10 +10,6 @@ type BadWordsRepository struct {
 	bd *sql.DB
 }
 
-func newBadWordsRepository(db *sql.DB) *BadWordsRepository {
-	return &BadWordsRepository{bd: db}
-}
-
 func (dc *BadWordsRepository) FindAll() (badWordList []string, err error) {
 	sql := "SELECT name FROM bad_word"
 	rows, err := dc.bd.Query(sql)
@@ -23,8 +19,7 @@ func (dc *BadWordsRepository) FindAll() (badWordList []string, err error) {
 
 	var badWord string
 	for rows.Next() {
-		err := rows.Scan(&badWord)
-		if err != nil {
+		if err := rows.Scan(&badWord); err != nil {
 			return badWordList, err
 		}
 

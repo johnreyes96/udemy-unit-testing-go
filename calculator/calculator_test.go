@@ -4,19 +4,9 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
 )
 
-type DiscountRepositoryMock struct {
-	mock.Mock
-}
-
-func (drm DiscountRepositoryMock) FindCurrentDiscount() int {
-	args := drm.Called()
-	return args.Int(0)
-}
-
-func TestDiscountCalculator(t *testing.T) {
+func TestGivenDiscountCalculator(t *testing.T) {
 	type testCase struct {
 		name                  string
 		minimumPurchaseAmount int
@@ -27,35 +17,35 @@ func TestDiscountCalculator(t *testing.T) {
 
 	testCases := []testCase{
 		{
-			name:                  "should apply 20",
+			name:                  "WhenDiscountIs20ThenShouldApply20",
 			minimumPurchaseAmount: 100,
 			purchaseAmount:        150,
 			discount:              20,
 			expectedAmount:        130,
 		},
 		{
-			name:                  "should apply 40",
+			name:                  "WhenDiscountIs20AndPurchaseAmountIsDoubleThanMinimumThenShouldApply40",
 			minimumPurchaseAmount: 100,
 			purchaseAmount:        200,
 			discount:              20,
 			expectedAmount:        160,
 		},
 		{
-			name:                  "should apply 60",
+			name:                  "WhenDiscountIs20AndPurchaseAmountIsTripleThanMinimumThenShouldApply60",
 			minimumPurchaseAmount: 100,
 			purchaseAmount:        350,
 			discount:              20,
 			expectedAmount:        290,
 		},
 		{
-			name:                  "should not apply",
+			name:                  "WhenDiscountIs20AndPurchaseAmountIsLessThanMinimumThenShouldNotApply",
 			minimumPurchaseAmount: 100,
 			purchaseAmount:        50,
 			discount:              20,
 			expectedAmount:        50,
 		},
 		{
-			name:                  "should not apply when discount is zero",
+			name:                  "WhenDiscountIsZeroThenShouldNotApply",
 			minimumPurchaseAmount: 100,
 			purchaseAmount:        50,
 			discount:              0,
@@ -76,7 +66,7 @@ func TestDiscountCalculator(t *testing.T) {
 	}
 }
 
-func TestDiscountCalculatorShouldFailWithZeroPurchaseAmount(t *testing.T) {
+func TestGivenDiscountCalculatorWhenMinimumPurchaseAmountIsZeroThenShouldFailWithZeroPurchaseAmount(t *testing.T) {
 	discountRepositoryMock := DiscountRepositoryMock{}
 
 	_, err := NewDiscountCalculator(0, discountRepositoryMock)
